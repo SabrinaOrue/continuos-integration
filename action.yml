@@ -99,6 +99,7 @@ runs:
           workdir_test: ${{ inputs.workdir_test }}
           matrix_version: ${{ inputs.matrix_version }}
           fontawesome_token: ${{ inputs.fontawesome_token }}
+          is_nextjs: ${{ inputs.workflow == 'Next.js' }}
           
       - name: "Continuos Integration Golang"
         if: ${{ inputs.workflow == 'Go' }}
