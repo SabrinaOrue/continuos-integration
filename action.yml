@@ -46,10 +46,6 @@ inputs:
     description: "token de fontawesome"
     required: false
     default: ''
-  is_nextjs:
-    description: "es un proyecto nextjs"
-    required: false
-    default: "false"
 
 runs:
   using: "composite"
@@ -67,5 +63,5 @@ runs:
           sonar_token: ${{ inputs.sonar_token }}
           tags: ${{ inputs.sonar_tags }}
           sonar_custom: ${{ inputs.sonar_custom }}
-          sonar_code: ${{ inputs.is_nextjs == "true" && 'Next.js' || 'Js' }}
+          sonar_code: 'Js'
 
