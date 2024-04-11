@@ -85,8 +85,8 @@ runs:
           workdir_src: ${{ inputs.workdir_src }}
           workdir_test: ${{ inputs.workdir_test }}
 
-      - name: "Continuos Integration React & Next.js"
-        if: ${{ inputs.workflow == 'CRA' || inputs.workflow == 'Next.js' || inputs.workflow == 'Vite'}}
+      - name: "Continuos Integration React"
+        if: ${{ inputs.workflow == 'CRA' || inputs.workflow == 'Vite'}}
         uses: infrastructure-services/continuos-integration@react
         with: 
           github_username: ${{ inputs.github_username }}
@@ -99,8 +99,22 @@ runs:
           workdir_test: ${{ inputs.workdir_test }}
           matrix_version: ${{ inputs.matrix_version }}
           fontawesome_token: ${{ inputs.fontawesome_token }}
-          is_nextjs: ${{ inputs.workflow == 'Next.js' }}
-          
+
+      - name: "Continuos Integration Next.js"
+        if: ${{ inputs.workflow == 'Next.js' }}
+        uses: infrastructure-services/continuos-integration@nextjs
+        with: 
+          github_username: ${{ inputs.github_username }}
+          github_token: ${{ inputs.github_token }}
+          sonar_url: ${{ inputs.sonar_url }}
+          sonar_token: ${{ inputs.sonar_token }}
+          sonar_tags: ${{ inputs.sonar_tags }}
+          sonar_custom: ${{ inputs.sonar_custom }}
+          workdir_src: ${{ inputs.workdir_src }}
+          workdir_test: ${{ inputs.workdir_test }}
+          matrix_version: ${{ inputs.matrix_version }}
+          fontawesome_token: ${{ inputs.fontawesome_token }}
+            
       - name: "Continuos Integration Golang"
         if: ${{ inputs.workflow == 'Go' }}
         uses: infrastructure-services/continuos-integration@go
