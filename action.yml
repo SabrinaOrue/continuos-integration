@@ -3,6 +3,8 @@ description: "Este action valida si la aplicación existe en GitOps"
 runs:
   using: "composite"
   steps: 
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: "Consulta al endpoint"
         env:
           GITHUB_REPONAME: ${{ github.event.repository.name }}
