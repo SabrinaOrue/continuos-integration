@@ -1,71 +1,8 @@
-name: "Continuos Integration Wrapper"
-description: "Este archivo de pipeline de CI/CD es una plantilla genérica diseñada para soportar múltiples tecnologías y frameworks. Su objetivo es automatizar los pasos de integración y despliegue para proyectos de software, garantizando un proceso de desarrollo y entrega eficiente y consistente."
-
-inputs:
-  qa:
-    description: 'QA'
-    required: true
-    type: boolean
-    default: false
-  workflow: 
-    description: "nombre del workflow a ejecutar"
-    required: true
-    
-  # Github
-  github_username:
-    description: "usuario de github para autenticarse en los packages"
-    required: true
-  github_token:
-    description: "token del usuario con permisos de lectura en packages"
-    required: true
-
-  # Directories
-  workdir_src:
-    description: "directorio donde se encuentra el project a compilar DEFAULT: ./"
-    required: false
-    default: './'
-  workdir_test:
-    description: "directorio donde se encuentra los test DEFAULT: ./"
-    required: false
-    default: './'
-
-  # Sonarqube
-  sonar_url: 
-    description: "url sonarqube"
-    required: true
-  sonar_token: 
-    description: "token sonarqube"
-    required: true
-  sonar_custom:
-    description: "config sonar custom"
-    default: ""
-    required: false
-  sonar_tags:
-    description: "extra tags, ej: 'react-18, microfrontend'"
-    default: ""
-    required: false
-
-  # Build
-  version:
-    description: "version de lenguaje, ej 3.7, 3.8..."
-    required: false
-    default: '3.8'
-  matrix_version:
-    description: "matrix de pruebas node"
-    required: false
-    default: ""
-
-  ## Build React
-  fontawesome_token: 
-    description: "token de fontawesome"
-    required: false
-    default: ''
-
+name: "Check if Exists apps"
+description: "Este action valida si la aplicación existe en GitOps"
 runs:
   using: "composite"
   steps: 
-      - name: Checkout
-        uses: actions/checkout@v3.5.0
       - name: "Consulta al endpoint"
         env:
           GITHUB_REPONAME: ${{ github.event.repository.name }}
@@ -76,77 +13,12 @@ runs:
           echo $GITHUB_OWNER
           status_code=$(curl -o /dev/null -s -w "%{http_code}\n" --location --head "https://github-integration.andreani.com/api/v1/org/${{ env.GITHUB_OWNER }}/repository/${{ env.GITHUB_REPONAME }}")
           if [ "$status_code" -eq 200 ]; then
-            echo "Successful request"
+            echo "OK - The application are register in GitOps"
           elif [ "$status_code" -eq 404 ]; then
-            echo "Error: Not found"
+            echo "Error: The application are not register in GitOps. Send message to devops team"
             exit 1
           else
-            echo "Error: Status code $status_code"
+            echo "Error: The GitOps response error -> $status_code"
             exit 1
           fi
-      - name: "Continuos Integration .NET"
-        if: ${{ inputs.workflow == '.NET' }}
-        uses: infrastructure-services/continuos-integration@net
-        with:
-          github_username: ${{ inputs.github_username }}
-          github_token: ${{ inputs.github_token }}
-          sonar_url: ${{ inputs.sonar_url }}
-          sonar_token: ${{ inputs.sonar_token }}
-          sonar_tags: ${{ inputs.sonar_tags }}
-          sonar_custom: ${{ inputs.sonar_custom }}
-          workdir_src: ${{ inputs.workdir_src }}
-          workdir_test: ${{ inputs.workdir_test }}
 
-      - name: "Continuos Integration .NET 8"
-        if: ${{ inputs.workflow == '.NET 8' }}
-        uses: infrastructure-services/continuos-integration@net-8
-        with:
-          github_username: ${{ inputs.github_username }}
-          github_token: ${{ inputs.github_token }}
-          sonar_url: ${{ inputs.sonar_url }}
-          sonar_token: ${{ inputs.sonar_token }}
-          sonar_tags: ${{ inputs.sonar_tags }}
-          sonar_custom: ${{ inputs.sonar_custom }}
-          workdir_src: ${{ inputs.workdir_src }}
-          workdir_test: ${{ inputs.workdir_test }}
-
-      - name: "Continuos Integration React & Next.js"
-        if: ${{ inputs.workflow == 'CRA' || inputs.workflow == 'Next.js' || inputs.workflow == 'Vite'}}
-        uses: infrastructure-services/continuos-integration@react
-        with: 
-          github_username: ${{ inputs.github_username }}
-          github_token: ${{ inputs.github_token }}
-          sonar_url: ${{ inputs.sonar_url }}
-          sonar_token: ${{ inputs.sonar_token }}
-          sonar_tags: ${{ inputs.sonar_tags }}
-          sonar_custom: ${{ inputs.sonar_custom }}
-          workdir_src: ${{ inputs.workdir_src }}
-          workdir_test: ${{ inputs.workdir_test }}
-          matrix_version: ${{ inputs.matrix_version }}
-          fontawesome_token: ${{ inputs.fontawesome_token }}
-          
-      - name: "Continuos Integration Golang"
-        if: ${{ inputs.workflow == 'Go' }}
-        uses: infrastructure-services/continuos-integration@go
-        with:
-          github_username: ${{ inputs.github_username }}
-          github_token: ${{ inputs.github_token }}
-          sonar_url: ${{ inputs.sonar_url }}
-          sonar_token: ${{ inputs.sonar_token }}
-          sonar_tags: ${{ inputs.sonar_tags }}
-          sonar_custom: ${{ inputs.sonar_custom }}
-          workdir_src: ${{ (inputs.workdir_src == './') && 'src/' || inputs.workdir_src }} # se agrega ya que golang necesita el archivo main.go
-          workdir_test: ${{ (inputs.workdir_test == './') && 'src/' || inputs.workdir_test }}
-
-      - name: "Continuos Integration Python"
-        if: ${{ inputs.workflow == 'Python' || inputs.workflow == 'Python Data'}}
-        uses: infrastructure-services/continuos-integration@python
-        with:
-          github_username: ${{ inputs.github_username }}
-          github_token: ${{ inputs.github_token }}
-          sonar_url: ${{ inputs.sonar_url }}
-          sonar_token: ${{ inputs.sonar_token }}
-          sonar_tags: ${{ inputs.sonar_tags }}
-          sonar_custom: ${{ inputs.sonar_custom }}
-          workdir_src: ${{ inputs.workdir_src }}
-          workdir_test: ${{ inputs.workdir_test }}
