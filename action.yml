@@ -46,6 +46,11 @@ inputs:
     description: "token de fontawesome"
     required: false
     default: ''
+  ## pnpm version
+  pnpm_version:
+    description: "version de pnpm"
+    required: false
+    default: '8'
 
 runs:
   using: "composite"
@@ -56,6 +61,7 @@ runs:
           matrix_version: ${{ inputs.matrix_version }}
           packages_token: ${{ inputs.github_token }}
           fontawesome_token: ${{ inputs.fontawesome_token }}
+          fontawesome_token: ${{ inputs.pnpm_version }}
       - name: "SonarQube Analyzer"
         uses: architecture-it/actions@sonarqube
         with:
