@@ -55,6 +55,11 @@ inputs:
     description: "token de fontawesome"
     required: false
     default: ''
+  ## pnpm version
+  pnpm_version:
+    description: "version de pnpm"
+    required: false
+    default: '8'
 
 runs:
   using: "composite"
@@ -101,6 +106,7 @@ runs:
           workdir_test: ${{ inputs.workdir_test }}
           matrix_version: ${{ inputs.matrix_version }}
           fontawesome_token: ${{ inputs.fontawesome_token }}
+          pnpm_version: ${{ inputs.pnpm_version }}
 
       - name: "Continuos Integration Next.js"
         if: ${{ inputs.workflow == 'Next.js' }}
