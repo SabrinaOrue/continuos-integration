@@ -61,7 +61,7 @@ runs:
           matrix_version: ${{ inputs.matrix_version }}
           packages_token: ${{ inputs.github_token }}
           fontawesome_token: ${{ inputs.fontawesome_token }}
-          fontawesome_token: ${{ inputs.pnpm_version }}
+          pnpm_version: ${{ inputs.pnpm_version }}
       - name: "SonarQube Analyzer"
         uses: architecture-it/actions@sonarqube
         with:
