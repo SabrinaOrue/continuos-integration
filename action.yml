@@ -59,7 +59,7 @@ inputs:
   pnpm_version:
     description: "version de pnpm"
     required: false
-    default: '8'
+    default: '9'
 
 runs:
   using: "composite"
