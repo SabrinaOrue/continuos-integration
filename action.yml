@@ -122,6 +122,7 @@ runs:
           workdir_test: ${{ inputs.workdir_test }}
           matrix_version: ${{ inputs.matrix_version }}
           fontawesome_token: ${{ inputs.fontawesome_token }}
+          pnpm_version: ${{ inputs.pnpm_version }}
             
       - name: "Continuos Integration Golang"
         if: ${{ inputs.workflow == 'Go' }}
