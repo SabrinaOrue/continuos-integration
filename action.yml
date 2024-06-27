@@ -164,3 +164,10 @@ runs:
           workdir_test: ${{ inputs.workdir_test }}
           matrix_version: ${{ inputs.matrix_version }}
           fontawesome_token: ${{ inputs.fontawesome_token }}
+
+      - name: "Validation of Supported Workflows"
+        if: ${{ inputs.workflow != '.NET' && inputs.workflow != '.NET 8' && inputs.workflow != 'CRA' && inputs.workflow != 'Vite' && inputs.workflow != 'Rsbuild' && inputs.workflow != 'Next.js' && inputs.workflow != 'Go' && inputs.workflow != 'Python' && inputs.workflow != 'Python Data' && inputs.workflow != 'React Native' }}
+        run: |
+          echo "::error title='❌Unsupported workflow'::Supported workflows include: '.NET', '.NET 8', 'CRA', 'Vite', 'Rsbuild', 'Next.js', 'Go', 'Python', 'Python Data', 'React Native'. Please contact the DevOps team for assistance to review the 'WORKFLOW_CI' repository variable."
+          exit 1
+        shell: bash
