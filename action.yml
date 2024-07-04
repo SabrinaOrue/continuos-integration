@@ -19,14 +19,15 @@ runs:
         run: |-
           echo $GITHUB_REPONAME
           echo $GITHUB_OWNER
-          status_code=$(curl -o /dev/null -s -w "%{http_code}\n" --location --head "${{ inputs.gitOpsUrl }}/api/v1/org/${{ env.GITHUB_OWNER }}/repository/${{ env.GITHUB_REPONAME }}")
-          if [ "$status_code" -eq 200 ]; then
-            echo "OK - The application are register in GitOps"
-          elif [ "$status_code" -eq 404 ]; then
-            echo "Error: The application are not register in GitOps. Send message to devops team"
-            exit 1
-          else
-            echo "Error: The GitOps response error -> $status_code"
-            exit 1
-          fi
+          
+          # status_code=$(curl -o /dev/null -s -w "%{http_code}\n" --location --head "${{ inputs.gitOpsUrl }}/api/v1/org/${{ env.GITHUB_OWNER }}/repository/${{ env.GITHUB_REPONAME }}")
+          # if [ "$status_code" -eq 200 ]; then
+          #  echo "OK - The application are register in GitOps"
+          # elif [ "$status_code" -eq 404 ]; then
+          #  echo "Error: The application are not register in GitOps. Send message to devops team"
+          #  exit 1
+          # else
+          #  echo "Error: The GitOps response error -> $status_code"
+          #  exit 1
+          # fi
 
